@@ -1,0 +1,115 @@
+services:
+  rag-service:
+    container_name: rag-service
+    build: ./rag-service
+    ports: ["8001:8001"]
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./data:/data:ro
+      - rag_index:/var/lib/rag
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket,sys; s=socket.create_connection(('127.0.0.1',8001),2); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - rag-net 
+
+  translation-service:
+    container_name: translation-service
+    build: ./translation-service
+    ports: ["8002:8002"]
+    volumes:
+      - ./translation-service/models:/models:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket,sys; s=socket.create_connection(('127.0.0.1',8002),2); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - rag-net 
+
+  client-service:
+    container_name: client-service
+    build: ./client-service
+    ports: ["8000:8000"]
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - RAG_URL=http://rag-service:8001/mcp/
+      - TRANSLATION_URL=http://translation-service:8002/mcp/
+      - REDIS_URL=redis://redis:6379/0
+      - CHAT_TTL_SECONDS=86400
+    depends_on:
+      rag-service: { condition: service_healthy }
+      translation-service: { condition: service_healthy }
+    networks:
+      - streaming-f-net
+      - rag-net 
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',8000),2); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  telegram-service:
+    build: ./telegram-service
+    container_name: telegram-service
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - CLIENT_URL=http://client-service:8000/mcp/
+    ports:
+      - "8003:8003"
+    depends_on:
+      client-service: { condition: service_healthy }
+    networks:
+      - streaming-f-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',8003),2); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - streaming-f-net
+  
+  streamlit-service:
+    build: ./streamlit-service
+    container_name: streamlit-service
+    environment:
+      - CLIENT_MCP_URL=http://client-service:8000/mcp/
+      - APP_TITLE=Мій агент (Streamlit UI)
+    depends_on:
+      client-service: { condition: service_healthy }
+    ports:
+      - "8501:8501"
+    networks:
+      - streaming-f-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('127.0.0.1',8501),2); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+networks:
+  rag-net:
+  streaming-f-net:
+
+volumes:
+  rag_index:
+  redis_data:

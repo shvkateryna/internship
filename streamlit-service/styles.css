@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+:root {
+  --primary-color: var(--pink-accent);
+  --pink-accent: #ef8d93;
+  --card-bg: rgba(255,255,255,0.78);
+  --star-svg: none;
+}
+
+html, body, [class*="css"] {
+  font-family: 'Patrick Hand', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+body {
+  background-image: var(--star-svg);
+  background-size: 280px 280px;
+}
+
+.container-narrow { max-width: 680px; margin: 0 auto; }
+@media (max-width: 900px) { .container-narrow { max-width: 600px; } }
+@media (max-width: 640px) { .container-narrow { max-width: 92vw; } }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid #ffffffaa;
+  border-radius: 22px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+}
+
+.stTextArea textarea {
+  border-radius: 16px !important;
+  border: 2px solid #ef8d9333;
+  background: #fff;
+  padding: 12px 14px;
+  min-height: 140px;
+}
+@media (max-width: 640px) { .stTextArea textarea { min-height: 110px; } }
+
+.stButton > button,
+button[kind="primary"],
+button[kind="primaryFormSubmit"],
+[data-testid="baseButton-primary"],
+[data-testid="baseButton-primaryFormSubmit"],
+.stForm button[type="submit"] {
+  background: var(--pink-accent) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  padding: 0.7rem 1.2rem !important;
+  box-shadow: 0 8px 18px rgba(239,141,147,0.35) !important;
+  font-weight: 700 !important;
+}
+.stButton > button:hover,
+button[kind="primary"]:hover,
+button[kind="primaryFormSubmit"]:hover,
+[data-testid="baseButton-primary"]:hover,
+[data-testid="baseButton-primaryFormSubmit"]:hover,
+.stForm button[type="submit"]:hover {
+  filter: brightness(0.98) !important;
+}
+
+div[data-testid="stToast"] { font-family: inherit; }
+a { color: var(--pink-accent) !important; }
+.small-muted { color: #0008; font-size: 13px; }
+
+.chat-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+
+.msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.msg .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ffffffaa;
+}
+
+.msg .bubble {
+  background: var(--card-bg);
+  border: 1px solid #ffffffaa;
+  border-radius: 18px;
+  padding: 8px 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.msg.user { flex-direction: row-reverse; }
+.msg.user .bubble { border-color: #ef8d9333; }
+
+.msg .bubble p { margin: 0.35em 0; }
+.msg .bubble a { color: var(--pink-accent); text-decoration: underline; }
+.msg .bubble code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.94em;
+  background: #0000000a;
+  padding: 0.08em 0.35em;
+  border-radius: 6px;
+}
+.msg .bubble pre {
+  margin: 0.5em 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #0000000a;
+  overflow-x: auto;
+}
+
+.chat-wrapper::-webkit-scrollbar { width: 8px; }
+.chat-wrapper::-webkit-scrollbar-thumb { background: #0003; border-radius: 8px; }
+.chat-wrapper:hover::-webkit-scrollbar-thumb { background: #0006; }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0f1116 !important;
+    background-image: none !important;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
+  }
+  .stTextArea textarea {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #e8e8e8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  }
+  .stTextArea textarea::placeholder {
+    color: #bdbdbd !important;
+    opacity: 0.8 !important;
+  }
+  .small-muted, label { color: #cfcfcf !important; }
+  .stButton > button,
+  button[kind="primary"],
+  button[kind="primaryFormSubmit"],
+  [data-testid="baseButton-primary"],
+  [data-testid="baseButton-primaryFormSubmit"],
+  .stForm button[type="submit"] {
+    box-shadow: 0 8px 18px rgba(239, 141, 147, 0.28) !important;
+  }
+
+  .msg .bubble {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  }
+  .msg .bubble code,
+  .msg .bubble pre {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .chat-wrapper::-webkit-scrollbar-thumb { background: #fff2; }
+  .chat-wrapper:hover::-webkit-scrollbar-thumb { background: #fff4; }
+}

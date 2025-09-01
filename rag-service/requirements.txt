@@ -1,0 +1,11 @@
+fastmcp==2.10.6
+mcp==1.12.1
+httpx>=0.28
+anyio>=4.5
+
+faiss-cpu==1.8.0
+langchain==0.2.5
+langchain-openai==0.1.7
+langchain-community==0.2.5
+python-dotenv>=1.1.0
+stanza
