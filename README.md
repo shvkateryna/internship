@@ -48,4 +48,5 @@ Endpoints:
 ## How to run the project:
 1. docker compose build --no-cache
 2. docker compose up -d
+
 To close the project run: docker compose down -v.
