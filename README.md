@@ -38,6 +38,8 @@ Purpose: Simple web chat with avatars and a pleasant theme.
 
 Talks to client-service via MCP, shows a running dialog, and keeps a session-scoped session_id.
 
+<img width="803" height="657" alt="Screenshot 2025-09-01 at 23 45 06" src="https://github.com/user-attachments/assets/5c1edb19-e161-4ebb-a3cf-852c2e27a697" />
+
 ### Telegram service
 Purpose: Telegram bot gateway.
 
